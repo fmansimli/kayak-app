@@ -3,9 +3,11 @@ import {StyleSheet, Text, View} from 'react-native';
 import { Colors, Fonts} from '../constants';
 import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
 import CodePush from '../components/codepush/CodePush';
+import { ScreenProps } from '../types/types';
 
-const UpdateScreen: FC = props => {
+const UpdateScreen: FC<ScreenProps> = props => {
   return (
+
     <View style={styles.screen}>
       <Text style={styles.title}>This is update Screen!</Text>
       <CodePush />
