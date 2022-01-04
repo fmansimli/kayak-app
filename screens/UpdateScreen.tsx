@@ -7,7 +7,7 @@ import CodePush from '../components/codepush/CodePush';
 const UpdateScreen: FC = props => {
   return (
     <View style={styles.screen}>
-      <Text style={styles.title}>Update Screen!</Text>
+      <Text style={styles.title}>This is update Screen!</Text>
       <CodePush />
     </View>
   );
