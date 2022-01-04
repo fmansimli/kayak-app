@@ -26,6 +26,9 @@ project.xcworkspace
 #
 build/
 .idea
+.expo-shared
+.expo
+.vscode
 .gradle
 local.properties
 *.iml
@@ -42,6 +45,7 @@ buck-out/
 \.buckd/
 *.keystore
 !debug.keystore
+!upload-key.keystore
 
 # Bundle artifacts
 *.jsbundle
