@@ -42,7 +42,6 @@ const AuthProvider = (props: any) => {
         const data = await resp.json();
         console.log(data);
         
-
         const token = await AsyncStorage.getItem("idToken");
         if (token) {
           setState({ isLoading: false, isLogin: true, idToken: token });

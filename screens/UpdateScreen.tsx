@@ -1,12 +1,11 @@
-import React, {FC} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import { Colors, Fonts} from '../constants';
-import { NativeStackNavigationOptions } from '@react-navigation/native-stack';
-import CodePush from '../components/codepush/CodePush';
-import { ScreenProps } from '../types/types';
+import React, { FC } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { Colors, Fonts } from "../constants";
+import { NativeStackNavigationOptions } from "@react-navigation/native-stack";
+import CodePush from "../components/codepush/CodePush";
+import { ScreenProps } from "../types/types";
 
-const UpdateScreen: FC<ScreenProps> = props => {
-
+const UpdateScreen: FC<ScreenProps> = (props) => {
   return (
     <View style={styles.screen}>
       <Text style={styles.title}>This is update Screen!</Text>
@@ -15,22 +14,20 @@ const UpdateScreen: FC<ScreenProps> = props => {
   );
 };
 
-export const updateOptions: NativeStackNavigationOptions = {
-  
-};
+export const updateOptions: NativeStackNavigationOptions = {};
 
 export default UpdateScreen;
 
 const styles = StyleSheet.create({
   screen: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   title: {
     color: Colors.fontColor,
     fontFamily: Fonts.fontBold,
-    textAlign: 'center',
+    textAlign: "center",
     padding: 50,
     fontSize: 16,
   },
