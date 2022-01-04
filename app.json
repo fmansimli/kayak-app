@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "kayak-app",
+    "slug": "kayak-app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "kayak-app"
+}
