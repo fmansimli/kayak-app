@@ -1,6 +1,6 @@
-import React, {useContext, useState, useEffect, createContext} from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {loginAsync, registerAsync} from '../services/auth';
+import React, { useContext, useState, useEffect, createContext } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { loginAsync, registerAsync } from "../services/auth";
 
 interface authContext {
   auth: authState;
@@ -18,7 +18,7 @@ interface authState {
   expiresIn?: number;
 }
 const defaultContext: authContext = {
-  auth: {isLoading: true, isLogin: false},
+  auth: { isLoading: true, isLogin: false },
   logout: () => {},
   signIn: () => {},
   signUp: () => {},
@@ -29,16 +29,28 @@ const AuthProvider = (props: any) => {
   const [state, setState] = useState<authState>(defaultContext.auth);
 
   useEffect(() => {
-    (async () => {      
+    (async () => {
       try {
-        const token = await AsyncStorage.getItem('idToken');
+        const resp = await fetch("urlllll", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ username: "Farid", password: "test" }),
+        });
+
+        const data = await resp.json();
+        console.log(data);
+        
+
+        const token = await AsyncStorage.getItem("idToken");
         if (token) {
-          setState({isLoading: false, isLogin: true, idToken: token});
+          setState({ isLoading: false, isLogin: true, idToken: token });
         } else {
-          throw new Error('no token!');
+          throw new Error("no token!");
         }
       } catch (error) {
-        setState(data => ({...data, isLoading: false}));
+        setState((data) => ({ ...data, isLoading: false }));
       }
     })();
   }, []);
@@ -47,8 +59,8 @@ const AuthProvider = (props: any) => {
     try {
       const resp = await loginAsync(email, password);
       if (!resp.ok) {
-        const {code, message} = await resp.json();
-        throw {code, message};
+        const { code, message } = await resp.json();
+        throw { code, message };
       }
       const data = await resp.json();
       setState({
@@ -60,13 +72,13 @@ const AuthProvider = (props: any) => {
         localId: data.localId,
         expiresIn: data.expiresIn,
       });
-      await AsyncStorage.setItem('idToken', data.idToken);
+      await AsyncStorage.setItem("idToken", data.idToken);
       cb();
     } catch (error: any) {
       let readableMessage;
       switch (error.message) {
         default:
-          readableMessage = 'something went wrong. Please try again';
+          readableMessage = "something went wrong. Please try again";
       }
       cb(readableMessage);
     }
@@ -75,8 +87,10 @@ const AuthProvider = (props: any) => {
     try {
       const resp = await registerAsync(email, password);
       if (!resp.ok) {
-        const {error: {code, message}} = await resp.json();
-        throw {code, message};
+        const {
+          error: { code, message },
+        } = await resp.json();
+        throw { code, message };
       }
       const data = await resp.json();
       setState({
@@ -88,28 +102,28 @@ const AuthProvider = (props: any) => {
         localId: data.localId,
         expiresIn: data.expiresIn,
       });
-      await AsyncStorage.setItem('idToken', data.idToken);
+      await AsyncStorage.setItem("idToken", data.idToken);
       cb();
     } catch (error: any) {
-      let readableMessage = 'something went wrong. Please try again';
+      let readableMessage = "something went wrong. Please try again";
       switch (error.message) {
-        case 'EMAIL_EXISTS':
-          readableMessage = 'this email is already in use!';
+        case "EMAIL_EXISTS":
+          readableMessage = "this email is already in use!";
       }
       cb(readableMessage);
     }
   };
   const logout = async () => {
     try {
-      setState({isLoading: false, isLogin: false});
-      await AsyncStorage.removeItem('idToken');
+      setState({ isLoading: false, isLogin: false });
+      await AsyncStorage.removeItem("idToken");
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <AuthContext.Provider value={{auth: state, logout, signIn, signUp}}>
+    <AuthContext.Provider value={{ auth: state, logout, signIn, signUp }}>
       {props.children}
     </AuthContext.Provider>
   );
