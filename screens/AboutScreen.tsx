@@ -7,7 +7,7 @@ import { AntDesign } from '@expo/vector-icons';
 const AboutScreen: FC = props => {
   return (
     <View style={styles.screen}>
-      <Text style={styles.title}>About Screen!</Text>
+      <Text style={styles.title}> Test About Screen!</Text>
     </View>
   );
 };
