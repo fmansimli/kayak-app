@@ -27,6 +27,7 @@ const settingsScreenOptions: NativeStackNavigationOptions = {
   headerStyle: {
     backgroundColor: Colors.headerColor,
   },
+  headerShown: false,
 };
 
 export const settingsOptions: BottomTabNavigationOptions = {

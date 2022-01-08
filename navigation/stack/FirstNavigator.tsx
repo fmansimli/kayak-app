@@ -27,10 +27,13 @@ const firstScreenOptions: NativeStackNavigationOptions = {
   headerStyle: {
     backgroundColor: Colors.greenColor,
   },
+  headerShown: false,
 };
 
 export const firstOptions: BottomTabNavigationOptions = {
-  tabBarIcon: () => <AntDesign name="home" size={24} color={Colors.fontColor} />,
+  tabBarIcon: () => (
+    <AntDesign name="home" size={24} color={Colors.fontColor} />
+  ),
 };
 
 export default FirstNavigator;

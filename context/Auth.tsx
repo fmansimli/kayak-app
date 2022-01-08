@@ -1,128 +1,75 @@
 import React, { useContext, useState, useEffect, createContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { loginAsync, registerAsync } from "../services/auth";
+import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import { Text, View } from "react-native";
 
-interface authContext {
-  auth: authState;
-  signIn: (email: string, password: string, cb: Function) => void;
-  signUp: (email: string, password: string, cb: Function) => void;
-  logout: () => void;
-}
-interface authState {
-  isLogin: boolean;
-  isLoading: boolean;
-  idToken?: string;
-  refreshToken?: string;
-  email?: string;
-  localId?: string;
-  expiresIn?: number;
-}
-const defaultContext: authContext = {
-  auth: { isLoading: true, isLogin: false },
-  logout: () => {},
-  signIn: () => {},
-  signUp: () => {},
-};
-const AuthContext = createContext<authContext>(defaultContext);
+GoogleSignin.configure({
+  webClientId:
+    "677034901661-3nn46158t1df1cvd40upvo32vj4h0v34.apps.googleusercontent.com",
+});
+
+// interface authContext {
+//   user: any;
+//   signIn: (email: string, password: string) => Promise<FirebaseAuthTypes.UserCredential>;
+//   signUp: (email: string, password: string) => Promise<FirebaseAuthTypes.UserCredential>;
+//   signInWithGoogle: () => Promise<FirebaseAuthTypes.UserCredential>;
+//   logout: () => Promise<void>;
+// }
+
+const AuthContext = createContext<any>(null);
 
 const AuthProvider = (props: any) => {
-  const [state, setState] = useState<authState>(defaultContext.auth);
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  function onAuthStateChanged(user: any) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
 
   useEffect(() => {
-    (async () => {
-      try {
-        const resp = await fetch("urlllll", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ username: "Farid", password: "test" }),
-        });
-
-        const data = await resp.json();
-        console.log(data);
-        
-        const token = await AsyncStorage.getItem("idToken");
-        if (token) {
-          setState({ isLoading: false, isLogin: true, idToken: token });
-        } else {
-          throw new Error("no token!");
-        }
-      } catch (error) {
-        setState((data) => ({ ...data, isLoading: false }));
-      }
-    })();
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber;
   }, []);
 
-  const signIn = async (email: string, password: string, cb: Function) => {
-    try {
-      const resp = await loginAsync(email, password);
-      if (!resp.ok) {
-        const { code, message } = await resp.json();
-        throw { code, message };
-      }
-      const data = await resp.json();
-      setState({
-        isLoading: false,
-        isLogin: true,
-        email: data.email,
-        idToken: data.idToken,
-        refreshToken: data.refreshToken,
-        localId: data.localId,
-        expiresIn: data.expiresIn,
-      });
-      await AsyncStorage.setItem("idToken", data.idToken);
-      cb();
-    } catch (error: any) {
-      let readableMessage;
-      switch (error.message) {
-        default:
-          readableMessage = "something went wrong. Please try again";
-      }
-      cb(readableMessage);
-    }
+  const signIn = (email: string, password: string) => {
+    return auth().signInWithEmailAndPassword(email, password);
   };
-  const signUp = async (email: string, password: string, cb: Function) => {
-    try {
-      const resp = await registerAsync(email, password);
-      if (!resp.ok) {
-        const {
-          error: { code, message },
-        } = await resp.json();
-        throw { code, message };
-      }
-      const data = await resp.json();
-      setState({
-        isLoading: false,
-        isLogin: true,
-        email: data.email,
-        idToken: data.idToken,
-        refreshToken: data.refreshToken,
-        localId: data.localId,
-        expiresIn: data.expiresIn,
-      });
-      await AsyncStorage.setItem("idToken", data.idToken);
-      cb();
-    } catch (error: any) {
-      let readableMessage = "something went wrong. Please try again";
-      switch (error.message) {
-        case "EMAIL_EXISTS":
-          readableMessage = "this email is already in use!";
-      }
-      cb(readableMessage);
-    }
-  };
-  const logout = async () => {
-    try {
-      setState({ isLoading: false, isLogin: false });
-      await AsyncStorage.removeItem("idToken");
-    } catch (error) {
-      console.error(error);
-    }
+  const signUp = (email: string, password: string) => {
+    return auth().createUserWithEmailAndPassword(email, password);
   };
 
+  const signInWithGoogle = async () => {
+    // Get the users ID token
+    const { idToken } = await GoogleSignin.signIn();
+
+    // Create a Google credential with the token
+    const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(googleCredential);
+  };
+
+  const logout = () => {
+    GoogleSignin.signOut();
+    return auth().signOut();
+  };
+
+  if (initializing) return null;
+
+  // if (!user) {
+  //   return (
+  //     <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
+  //       <Text>Login.......</Text>
+  //     </View>
+  //   );
+  // }
+
   return (
-    <AuthContext.Provider value={{ auth: state, logout, signIn, signUp }}>
+    <AuthContext.Provider
+      value={{ user: user, logout, signIn, signUp, signInWithGoogle }}
+    >
       {props.children}
     </AuthContext.Provider>
   );

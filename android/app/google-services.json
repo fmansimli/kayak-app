@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "677034901661",
+    "project_id": "kayak-app-7e7b6",
+    "storage_bucket": "kayak-app-7e7b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:677034901661:android:143853f67f6c259e2e1474",
+        "android_client_info": {
+          "package_name": "com.kayakapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "677034901661-67fq93nsl65qaen63ra2doupi1vg8omm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kayakapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "677034901661-3nn46158t1df1cvd40upvo32vj4h0v34.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBS6rfnjFkdODr3XkqOYG1m0V_c6-LEbdg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "677034901661-3nn46158t1df1cvd40upvo32vj4h0v34.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

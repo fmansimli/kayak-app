@@ -1,14 +1,18 @@
 import { AntDesign } from "@expo/vector-icons";
 import { BottomTabNavigationOptions } from "@react-navigation/bottom-tabs";
 import React, { FC } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { Colors, Fonts } from "../../constants";
-import { ScreenProps } from "../../types/types";
+import { MyScreenProps } from "../../types/types";
 
-const CartScreen: FC<ScreenProps> = () => {
-  return <SafeAreaView style={styles.safe}></SafeAreaView>;
+const CartScreen: FC<MyScreenProps> = () => {
+  return (
+    <SafeAreaView style={styles.safe}>
+      <Text>Cart Screen</Text>
+    </SafeAreaView>
+  );
 };
 
 export const cartTabOptions: BottomTabNavigationOptions = {

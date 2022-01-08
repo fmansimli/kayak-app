@@ -60,9 +60,8 @@ const tabScreenOptions: BottomTabNavigationOptions = {
 };
 
 export const tabOptions: DrawerNavigationOptions = {
-  drawerIcon: () => <AntDesign name="login" size={24} color="#79807f" />,
-  headerShown: false,
-  title: "Home",
+  drawerIcon: () => <AntDesign name="home" size={24} color="#79807f" />,
+  title: "Main",
 };
 
 export default TabNavigator;
