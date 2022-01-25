@@ -5,9 +5,13 @@ import { useAuth } from "../../context/Auth";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 const FacebookLogin = () => {
-  const {} = useAuth();
+  const {signInWithFacebook} = useAuth();
 
-  const onPressHandler = () => {};
+  const onPressHandler = () => {
+    signInWithFacebook()
+      .then(() => {})
+      .catch((error: any) => {});
+  };
 
   return (
     <TouchableOpacity

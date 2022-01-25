@@ -38,6 +38,7 @@ android {
     }
 
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.kayakapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
@@ -80,7 +81,6 @@ android {
         release {
             resValue "string", "CodePushDeploymentKey", '"WazQKGs7vISUtn0aWYr9znoRAdIRA2HQssce-"'
             signingConfig signingConfigs.release
-            //signingConfig signingConfigs.debug
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -103,9 +103,11 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
 
     def isGifEnabled = (findProperty('expo.gif.enabled') ?: "") == "true";
     def isWebpEnabled = (findProperty('expo.webp.enabled') ?: "") == "true";

@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect, createContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { Text, View } from "react-native";
+import { LoginManager, AccessToken } from "react-native-fbsdk-next";
 
 GoogleSignin.configure({
   webClientId:
@@ -24,6 +24,8 @@ const AuthProvider = (props: any) => {
   const [user, setUser] = useState();
 
   function onAuthStateChanged(user: any) {
+    console.log(user);
+
     setUser(user);
     if (initializing) setInitializing(false);
   }
@@ -51,24 +53,51 @@ const AuthProvider = (props: any) => {
     return auth().signInWithCredential(googleCredential);
   };
 
+  async function signInWithFacebook() {
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions([
+      "public_profile",
+      "email",
+    ]);
+
+    if (result.isCancelled) {
+      throw "User cancelled the login process";
+    }
+
+    // Once signed in, get the users AccesToken
+    const data = await AccessToken.getCurrentAccessToken();
+
+    if (!data) {
+      throw "Something went wrong obtaining access token";
+    }
+
+    // Create a Firebase credential with the AccessToken
+    const facebookCredential = auth.FacebookAuthProvider.credential(
+      data.accessToken
+    );
+
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(facebookCredential);
+  }
+
   const logout = () => {
     GoogleSignin.signOut();
+    LoginManager.logOut();
     return auth().signOut();
   };
 
   if (initializing) return null;
 
-  // if (!user) {
-  //   return (
-  //     <View style={{ justifyContent: "center", alignItems: "center", flex: 1 }}>
-  //       <Text>Login.......</Text>
-  //     </View>
-  //   );
-  // }
-
   return (
     <AuthContext.Provider
-      value={{ user: user, logout, signIn, signUp, signInWithGoogle }}
+      value={{
+        user: user,
+        logout,
+        signIn,
+        signUp,
+        signInWithGoogle,
+        signInWithFacebook,
+      }}
     >
       {props.children}
     </AuthContext.Provider>
